@@ -400,4 +400,10 @@
 
 #endif /* CONFIG_ANDROID_SUPPORT */
 
+#undef CONFIG_VIDEO_LOGO
+
+#define CONFIG_AUTOBOOT_KEYED          1 
+#define CONFIG_AUTOBOOT_PROMPT "Press ESC twice to abort autoboot in %d seconds\n"
+#define CONFIG_AUTOBOOT_STOP_STR "\x1b\x1b"
+
 #endif                         /* __MX6QSABRE_COMMON_CONFIG_H */
