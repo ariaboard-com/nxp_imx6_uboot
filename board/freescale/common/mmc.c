@@ -39,7 +39,7 @@ void board_late_mmc_env_init(void)
 	setenv_ulong("mmcdev", dev_no);
 
 	/* Set mmcblk env */
-	sprintf(mmcblk, "/dev/mmcblk%dp2 rootwait rw",
+	sprintf(mmcblk, "/dev/mmcblk%dp2 rootwait ro",
 		mmc_map_to_kernel_blk(dev_no));
 	setenv("mmcroot", mmcblk);
 
