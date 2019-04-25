@@ -76,7 +76,7 @@ DECLARE_GLOBAL_DATA_PTR;
 
 #define I2C_PAD MUX_PAD_CTRL(I2C_PAD_CTRL)
 
-#define DISP0_PWR_EN	IMX_GPIO_NR(1, 21)
+#define DISP0_PWR_EN	IMX_GPIO_NR(4, 7)
 
 #define KEY_VOL_UP	IMX_GPIO_NR(1, 4)
 
@@ -221,14 +221,14 @@ static iomux_v3_cfg_t const rgb_pads[] = {
 };
 
 static iomux_v3_cfg_t const bl_pads[] = {
-	MX6_PAD_SD1_DAT3__GPIO1_IO21 | MUX_PAD_CTRL(NO_PAD_CTRL),
+	MX6_PAD_KEY_ROW0__GPIO4_IO07 | MUX_PAD_CTRL(NO_PAD_CTRL),
 };
 
 static void enable_backlight(void)
 {
 	imx_iomux_v3_setup_multiple_pads(bl_pads, ARRAY_SIZE(bl_pads));
 	gpio_request(DISP0_PWR_EN, "Display Power Enable");
-	gpio_direction_output(DISP0_PWR_EN, 1);
+	gpio_direction_output(DISP0_PWR_EN, 0);
 }
 
 static void enable_rgb(struct display_info_t const *dev)
@@ -695,17 +695,17 @@ struct display_info_t const displays[] = {{
 	.detect	= NULL,
 	.enable	= enable_lvds,
 	.mode	= {
-		.name           = "Hannstar-XGA",
+		.name           = "VGA",
 		.refresh        = 60,
-		.xres           = 1024,
-		.yres           = 768,
-		.pixclock       = 15384,
-		.left_margin    = 160,
-		.right_margin   = 24,
-		.upper_margin   = 29,
-		.lower_margin   = 3,
-		.hsync_len      = 136,
-		.vsync_len      = 6,
+		.xres           = 640,
+		.yres           = 480,
+		.pixclock       = 39722,
+		.left_margin    = 48,
+		.right_margin   = 16,
+		.upper_margin   = 33,
+		.lower_margin   = 10,
+		.hsync_len      = 96,
+		.vsync_len      = 2,
 		.sync           = FB_SYNC_EXT,
 		.vmode          = FB_VMODE_NONINTERLACED
 } }, {
