@@ -188,6 +188,26 @@ int board_spi_cs_gpio(unsigned bus, unsigned cs)
 }
 #endif
 
+#ifdef CONFIG_MXC_LUNA_MONITOR_BOARD
+
+static iomux_v3_cfg_t const usb_sata_pads[] = {
+	MX6_PAD_GPIO_8__GPIO1_IO08	| MUX_PAD_CTRL(NO_PAD_CTRL)
+};
+
+static void luna_usb_sata_reset(void)
+{
+	imx_iomux_v3_setup_multiple_pads(usb_sata_pads, ARRAY_SIZE(usb_sata_pads));
+	gpio_request(IMX_GPIO_NR(1, 8), "USB SATA Reset");
+
+	gpio_direction_output(IMX_GPIO_NR(1, 8) , 1);
+	mdelay(10);
+	gpio_set_value(IMX_GPIO_NR(1, 8), 0);
+	mdelay(100);
+	gpio_set_value(IMX_GPIO_NR(1, 8), 1);
+}
+
+#endif
+
 static iomux_v3_cfg_t const rgb_pads[] = {
 	MX6_PAD_DI0_DISP_CLK__IPU1_DI0_DISP_CLK | MUX_PAD_CTRL(NO_PAD_CTRL),
 	MX6_PAD_DI0_PIN15__IPU1_DI0_PIN15 | MUX_PAD_CTRL(NO_PAD_CTRL),
@@ -954,6 +974,10 @@ int board_init(void)
 
 #ifdef CONFIG_FEC_MXC
 	setup_fec();
+#endif
+
+#ifdef CONFIG_MXC_LUNA_MONITOR_BOARD
+	luna_usb_sata_reset();
 #endif
 
 	return 0;

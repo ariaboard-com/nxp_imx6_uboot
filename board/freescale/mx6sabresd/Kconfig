@@ -9,4 +9,7 @@ config SYS_VENDOR
 config SYS_CONFIG_NAME
 	default "mx6sabresd"
 
+config MXC_LUNA_MONITOR_BOARD
+        bool "Luna Monitor board init"
+
 endif
