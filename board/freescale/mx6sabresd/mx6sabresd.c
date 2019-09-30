@@ -46,6 +46,8 @@
 
 DECLARE_GLOBAL_DATA_PTR;
 
+#define LUNA_WATCHDOG_GPIO IMX_GPIO_NR(4, 6)
+
 #define UART_PAD_CTRL  (PAD_CTL_PUS_100K_UP |			\
 	PAD_CTL_SPEED_MED | PAD_CTL_DSE_40ohm |			\
 	PAD_CTL_SRE_FAST  | PAD_CTL_HYS)
@@ -85,6 +87,12 @@ int dram_init(void)
 	gd->ram_size = imx_ddr_size();
 	return 0;
 }
+
+#if defined(CONFIG_MX6DL)
+static iomux_v3_cfg_t const luna_watchdog_pads[] = {
+	MX6_PAD_KEY_COL0__GPIO4_IO06 | MUX_PAD_CTRL(NO_PAD_CTRL),
+};
+#endif
 
 static iomux_v3_cfg_t const uart1_pads[] = {
 	MX6_PAD_CSI0_DAT10__UART1_TX_DATA | MUX_PAD_CTRL(UART_PAD_CTRL),
@@ -126,6 +134,16 @@ static void setup_iomux_enet(void)
 	imx_iomux_v3_setup_multiple_pads(enet_pads, ARRAY_SIZE(enet_pads));
 	fec_phy_reset();
 }
+
+#if defined(CONFIG_MX6DL)
+static void luna_disable_watchdog(void)
+{
+	imx_iomux_v3_setup_multiple_pads(luna_watchdog_pads,
+		ARRAY_SIZE(luna_watchdog_pads));
+ 	gpio_request(LUNA_WATCHDOG_GPIO, "Luna TV Watchdog disable.");
+	gpio_direction_output(LUNA_WATCHDOG_GPIO, 1);  
+}
+#endif
 
 static iomux_v3_cfg_t const usdhc2_pads[] = {
 	MX6_PAD_SD2_CLK__SD2_CLK	| MUX_PAD_CTRL(USDHC_PAD_CTRL),
@@ -939,6 +957,10 @@ int board_init(void)
 {
 	/* address of boot parameters */
 	gd->bd->bi_boot_params = PHYS_SDRAM + 0x100;
+
+#if defined(CONFIG_MX6DL)
+	luna_disable_watchdog();
+#endif
 
 #ifdef CONFIG_MXC_SPI
 	setup_spi();
