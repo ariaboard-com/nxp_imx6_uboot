@@ -11,7 +11,7 @@ if [ ! -d build/android-imx6dl ]; then
     mkdir -p build/android-imx6dl
 fi
 
-make O=build/android-imx6dl mx6dlsabresdandroid_luna_tv_defconfig
+make O=build/android-imx6dl mx6dlsabresdandroid_2x512m_defconfig
 make O=build/android-imx6dl -j2
 
 rm -rf deploy/android-imx6dl

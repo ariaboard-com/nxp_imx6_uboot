@@ -12,7 +12,7 @@ if [ ! -d build/imx6d-2x512m ]; then
     mkdir -p build/imx6d-2x512m
 fi
 
-make O=build/imx6d-2x512m mx6dsabresd_luna_tv_defconfig
+make O=build/imx6d-2x512m mx6dsabresd_2x512m_defconfig
 make O=build/imx6d-2x512m -j2
 
 rm -rf deploy/imx6d-2x512m
